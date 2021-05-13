@@ -1,0 +1,3 @@
+[submodule "decoder/src/direwolf"]
+	path = decoder/src/direwolf
+	url = https://github.com/wowry/direwolf.git

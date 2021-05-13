@@ -1,0 +1,26 @@
+# VS Code
+.vscode/
+workspace.code-workspace
+
+# cache
+decoder/src/__pycache__/
+.eslintcache
+
+# dependencies
+node_modules/
+
+# production
+/build/
+
+# package
+dist*/
+
+# Sample sounds
+samples/
+
+# log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+out/
