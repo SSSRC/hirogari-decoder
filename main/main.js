@@ -111,7 +111,7 @@ const template = [
                 label: 'Report a bug',
                 click: async () => {
                     await shell.openExternal(
-                        'https://github.com/SSSRC/hirogari-decoder-beta/issues'
+                        'https://github.com/SSSRC/hirogari-decoder/issues'
                     );
                 },
             },

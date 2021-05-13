@@ -1,16 +1,16 @@
 {
-    "name": "hirogari-decoder-beta",
+    "name": "hirogari-decoder",
     "version": "0.9.4",
     "description": "Telemetry Decoder software for CubeSat HIROGARI",
     "homepage": "./",
-    "bugs": "https://github.com/SSSRC/hirogari-decoder-beta/issues",
+    "bugs": "https://github.com/SSSRC/hirogari-decoder/issues",
     "license": "GPL-2.0-only",
     "author": "wowry, SSSRC <dev.wowry@gmail.com>",
     "funding": "https://www.sssrc.aero.osakafu-u.ac.jp/contribution/",
     "main": "main/main.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/SSSRC/hirogari-decoder-beta.git"
+        "url": "https://github.com/SSSRC/hirogari-decoder.git"
     },
     "scripts": {
         "build": "react-scripts build",
@@ -88,7 +88,7 @@
         "publish": {
             "provider": "github",
             "owner": "SSSRC",
-            "repo": "hirogari-decoder-beta",
+            "repo": "hirogari-decoder",
             "releaseType": "release"
         },
         "linux": {
