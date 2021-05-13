@@ -30,16 +30,6 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      
-      - name: Update permissions
-        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-        run: |
-          sudo chmod 755 ./decoder/build/linux/atest
-          sudo chmod 755 ./decoder/build/linux/server
-          sudo chmod 755 ./decoder/build/darwin/atest
-          sudo chmod 755 ./decoder/build/darwin/server
-          ls -l ./decoder/build/linux
-          ls -l ./decoder/build/darwin
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
