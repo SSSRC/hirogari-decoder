@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -88,10 +88,6 @@ const Decoder: React.FC = () => {
     const language = languageState.language;
     const decodeResultHex = decoderState.decodeResultHex;
     const decodeResultChar = decoderState.decodeResultChar;
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    });
 
     const isWaveFile = (filepath: string): boolean => {
         if (/(\.wav)$/.test(filepath)) {

@@ -41,6 +41,10 @@ const App: React.FC = () => {
 
     const visibility = useSelector(selectVisibility);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [visibility.sendPage]);
+
     return (
         <div className="App">
             {visibility.sendPage === false ? <Decoder /> : <Sender />}
