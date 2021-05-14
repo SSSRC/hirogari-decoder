@@ -1,6 +1,6 @@
 {
     "name": "hirogari-decoder",
-    "version": "0.10.0",
+    "version": "1.0.0",
     "description": "Telemetry Decoder software for CubeSat HIROGARI",
     "homepage": "./",
     "bugs": "https://github.com/SSSRC/hirogari-decoder/issues",

@@ -1,6 +1,21 @@
 <h1 align="center">
+  <img align="center" height="60px" src="./assets/icon256x256.png" />
   HIROGARI Decoder
 </h1>
+
+<p align="center">
+  <a href="https://github.com/SSSRC/hirogari-decoder/actions/workflows/build.yml">
+    <img src="https://github.com/SSSRC/hirogari-decoder/actions/workflows/build.yml/badge.svg" alt="Build/release Status" />
+  </a>
+
+  <a href="https://www.codacy.com/gh/SSSRC/hirogari-decoder/dashboard?utm_source=github.com&utm_medium=referral&utm_content=SSSRC/hirogari-decoder&utm_campaign=Badge_Grade">
+    <img src="https://app.codacy.com/project/badge/Grade/2e5e78667cf446ab84a33733636ebdd9" alt="Codacy Grade Status" />
+  </a>
+
+  <a href="https://github.com/SSSRC/hirogari-decoder/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/SSSRC/hirogari-decoder" alt="GPL-2.0 License" />
+  </a>
+</p>
 
 <p align="center">
   Telemetry Decoder software for amateur radio mission of CubeSat "HIROGARI"
@@ -70,3 +85,7 @@ How to change language settings:
 ## Author
 
 [wowry](https://github.com/wowry), [SSSRC](https://github.com/SSSRC)
+
+## Special Thanks
+
+Thanks to All Contributors!
