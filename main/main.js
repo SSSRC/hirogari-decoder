@@ -28,6 +28,20 @@ app.setAboutPanelOptions({
 });
 
 const template = [
+    ...(isMac
+        ? [
+              {
+                  label: app.name,
+                  submenu: [
+                      { role: 'hide' },
+                      { role: 'hideothers' },
+                      { role: 'unhide' },
+                      { type: 'separator' },
+                      { role: 'quit' },
+                  ],
+              },
+          ]
+        : []),
     {
         label: 'File',
         submenu: [isMac ? { role: 'close' } : { role: 'quit' }],
