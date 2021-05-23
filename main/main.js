@@ -11,7 +11,37 @@ const fs = require('fs');
 const fsp = require('fs').promises;
 const childProcess = require('child_process');
 const request = require('request');
+const consola = require('consola');
 const { getPort } = require('./setup');
+
+// Logs that is not
+const logPool = [];
+let logFileStream;
+
+/** Write object to logFileStream */
+const writeLog = (logObj) => {
+    const write = (data) => logFileStream.write(JSON.stringify(data) + '\n');
+
+    if (logFileStream && logFileStream.writable) {
+        // Flush logPool
+        for (const log of logPool) {
+            write(log);
+        }
+        logPool.length = 0;
+
+        // Write given data
+        write(logObj);
+        // If logStream is not ready
+    } else {
+        logPool.push(logObj);
+    }
+};
+
+consola.addReporter({
+    log: (logObj) => {
+        writeLog(logObj);
+    },
+});
 
 let mainWindow = null;
 let isJapanese = 0;
@@ -246,16 +276,17 @@ const setupLog = async () => {
     await fsp.mkdir(logFileDir, { recursive: true });
 
     // Create stream
-    const logStream = fs.createWriteStream(logFilePath);
-    logStream.write(logFileName + '\n');
-    console.log(`Logfile: ${logFilePath}`);
+    logFileStream = fs.createWriteStream(logFilePath);
+    logFileStream.write(logFileName + '\n');
+
+    consola.log(`Logfile: ${logFilePath}`);
 
     ipcMain.on('log', (_, __, logObj) => {
-        logStream.write(JSON.stringify(logObj) + '\n');
+        writeLog(logObj);
     });
 
     app.on('will-quit', () => {
-        logStream.write(`Gracefully ended by will-quit event.\n`);
-        logStream.end();
+        consola.log(`Gracefully ended by will-quit event.\n`);
+        logFileStream.end();
     });
 };
