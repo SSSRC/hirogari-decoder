@@ -1,9 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import consola, { ConsolaReporter, ConsolaReporterLogObject } from 'consola';
 import App from './app/App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+
+/** Report logs to main process */
+class IPCReporter implements ConsolaReporter {
+    log(logObj: ConsolaReporterLogObject) {
+        try {
+            // Transport via IPC
+            window.ipcRenderer.sendLog('log', logObj);
+        } catch (_) {
+            // In case of that logObj contains some special objects
+            consola.warn(`Some logs cannot be transported via IPC.`);
+        }
+    }
+}
+
+// Collect logs from consola globally
+consola.addReporter(new IPCReporter());
 
 ReactDOM.render(
     <React.StrictMode>

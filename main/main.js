@@ -7,6 +7,8 @@ const {
     shell,
 } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const fsp = require('fs').promises;
 const childProcess = require('child_process');
 const request = require('request');
 const { getPort } = require('./setup');
@@ -193,7 +195,10 @@ async function createWindow() {
     });
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+    setupLog();
+    createWindow();
+});
 
 app.on('window-all-closed', () => {
     if (!isMac) {
@@ -229,3 +234,28 @@ ipcMain.handle('show-dialog', async () => {
 
     return filePath;
 });
+
+// Logfile export
+const setupLog = async () => {
+    const logFileName =
+        'log_' + new Date().toISOString().replace(/[^0-9]/g, '') + '.log';
+    const logFileDir = path.resolve(app.getPath('userData'), 'logs');
+    const logFilePath = path.join(logFileDir, logFileName);
+
+    // Create log directory
+    await fsp.mkdir(logFileDir, { recursive: true });
+
+    // Create stream
+    const logStream = fs.createWriteStream(logFilePath);
+    logStream.write(logFileName + '\n');
+    console.log(`Logfile: ${logFilePath}`);
+
+    ipcMain.on('log', (_, __, logObj) => {
+        logStream.write(JSON.stringify(logObj) + '\n');
+    });
+
+    app.on('will-quit', () => {
+        logStream.write(`Gracefully ended by will-quit event.\n`);
+        logStream.end();
+    });
+};
