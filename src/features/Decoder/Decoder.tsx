@@ -142,6 +142,10 @@ const Decoder: React.FC = () => {
 
         const baudrate = FmMode[modeNumber].baudrate;
 
+        consola.log(
+            `Attempting decode with: filePath=${filePath} modeNumber=${modeNumber} baudRate=${baudrate}`
+        );
+
         window.ipcRenderer.getPort().then((port) => {
             const url = `http://localhost:${port}/api/decode-result?path=${filePath}&protocol=ax25&baudrate=${baudrate}`;
 
@@ -323,6 +327,7 @@ const Decoder: React.FC = () => {
     }
 
     if (Object.keys(errors).length > 0) {
+        consola.error('Error from form value:');
         consola.error(errors);
     }
 
