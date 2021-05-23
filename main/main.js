@@ -290,3 +290,9 @@ const setupLog = async () => {
         logFileStream.end();
     });
 };
+
+// Handle unhandleRejection
+process.on('unhandledRejection', (reason, promise) => {
+    consola.warn(reason);
+    consola.warn(promise);
+});
