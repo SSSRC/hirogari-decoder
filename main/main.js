@@ -6,6 +6,7 @@ const {
     dialog,
     shell,
 } = require('electron');
+const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const fsp = require('fs').promises;
@@ -13,6 +14,7 @@ const childProcess = require('child_process');
 const request = require('request');
 const consola = require('consola');
 const { getPort } = require('./setup');
+const package = require('../package.json');
 
 // Logs that is not
 const logPool = [];
@@ -281,6 +283,17 @@ const setupLog = async () => {
     logFileStream.write(logFileName + '\n');
 
     consola.log(`Logfile: ${logFilePath}`);
+    consola.debug(`Package info`, {
+        name: package.name,
+        version: package.version,
+    });
+    consola.debug(`System info`, {
+        arch: os.arch(),
+        cpus: os.cpus(),
+        freemem: os.freemem(),
+        platform: os.platform(),
+        version: os.version(),
+    });
 
     ipcMain.on('log', (_, __, logObj) => {
         writeLog(logObj);
