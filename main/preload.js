@@ -1,6 +1,9 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('ipcRenderer', {
+    sendLog: (...args) => {
+        return ipcRenderer.send('log', ...args);
+    },
     addLocaleListener: (listener) => {
         return ipcRenderer.on('get-locale', listener);
     },

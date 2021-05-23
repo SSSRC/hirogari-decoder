@@ -20,6 +20,7 @@ import {
     successMessageHandler,
 } from './AlertMessageHandler';
 import classNames from 'classnames';
+import consola from 'consola';
 import {
     Button,
     IconButton,
@@ -141,6 +142,10 @@ const Decoder: React.FC = () => {
 
         const baudrate = FmMode[modeNumber].baudrate;
 
+        consola.log(
+            `Attempting decode with: filePath=${filePath} modeNumber=${modeNumber} baudRate=${baudrate}`
+        );
+
         window.ipcRenderer.getPort().then((port) => {
             const url = `http://localhost:${port}/api/decode-result?path=${filePath}&protocol=ax25&baudrate=${baudrate}`;
 
@@ -154,7 +159,7 @@ const Decoder: React.FC = () => {
                                 throw new Error(`${data.message}`);
                             })
                             .catch((error) => {
-                                console.error(error);
+                                consola.error(error);
 
                                 const message = error
                                     .toString()
@@ -197,7 +202,7 @@ const Decoder: React.FC = () => {
                 .catch((error) => {
                     setIsInProgress(false);
 
-                    console.error(error);
+                    consola.error(error);
 
                     alertHandler.showAlert('Connection error', 'error');
                 });
@@ -322,7 +327,8 @@ const Decoder: React.FC = () => {
     }
 
     if (Object.keys(errors).length > 0) {
-        console.error(errors);
+        consola.error('Error from form value:');
+        consola.error(errors);
     }
 
     return (

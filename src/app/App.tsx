@@ -9,6 +9,7 @@ import { selectVisibility } from './visibilitySlice';
 type Listener = (e: IpcRendererEvent, arg: boolean) => void;
 
 interface IpcRenderer {
+    sendLog: (...args: unknown[]) => void;
     addLocaleListener: (listener: Listener) => void;
     removeLocaleListener: () => void;
     getPort: () => Promise<string>;

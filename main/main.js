@@ -6,10 +6,58 @@ const {
     dialog,
     shell,
 } = require('electron');
+const os = require('os');
 const path = require('path');
+const fs = require('fs');
+const fsp = require('fs').promises;
 const childProcess = require('child_process');
 const request = require('request');
+const consola = require('consola');
 const { getPort } = require('./setup');
+const package = require('../package.json');
+
+// Logs that is not
+const logPool = [];
+let logFileStream;
+
+// Set log level
+consola.level = consola.LogLevel.Trace;
+
+/** Write object to logFileStream */
+const writeLog = (logObj) => {
+    const write = (data) => {
+        const { date, type, args } = data;
+        const argsStr = args
+            .map((arg) => {
+                if (typeof arg === 'string') return arg;
+                else if (typeof arg === 'number') return arg.toString();
+                else return JSON.stringify(arg);
+            })
+            .join(' ');
+        const dateStr = date.toISOString ? date.toISOString() : date.toString();
+        logFileStream.write(`${dateStr} [${type}] ${argsStr}\n`);
+    };
+
+    if (logFileStream && logFileStream.writable) {
+        // Flush logPool
+        for (const log of logPool) {
+            write(log);
+        }
+        logPool.length = 0;
+
+        // Write given data
+        write(logObj);
+        // If logStream is not ready
+    } else {
+        logPool.push(logObj);
+    }
+};
+
+consola.addReporter({
+    log: (logObj) => {
+        writeLog(logObj);
+    },
+});
 
 let mainWindow = null;
 let isJapanese = 0;
@@ -145,6 +193,7 @@ async function createWindow() {
             'Unsupported Operating System',
             'Sorry, this operating system is not supported.\nApp will exit.'
         );
+        consola.fatal(`Unsupported OS: ${platform}`);
 
         app.exit();
     }
@@ -193,7 +242,10 @@ async function createWindow() {
     });
 }
 
-app.on('ready', createWindow);
+app.on('ready', async () => {
+    await setupLog();
+    createWindow();
+});
 
 app.on('window-all-closed', () => {
     if (!isMac) {
@@ -228,4 +280,47 @@ ipcMain.handle('show-dialog', async () => {
     const filePath = result.filePaths[0];
 
     return filePath;
+});
+
+// Logfile export
+const setupLog = async () => {
+    const logFileName =
+        'log_' + new Date().toISOString().replace(/[^0-9]/g, '') + '.log';
+    const logFileDir = path.resolve(app.getPath('userData'), 'logs');
+    const logFilePath = path.join(logFileDir, logFileName);
+
+    // Create log directory
+    await fsp.mkdir(logFileDir, { recursive: true });
+
+    // Create stream
+    logFileStream = fs.createWriteStream(logFilePath);
+    logFileStream.write(logFileName + '\n');
+
+    consola.log(`Logfile: ${logFilePath}`);
+    consola.debug(`Package info`, {
+        name: package.name,
+        version: package.version,
+    });
+    consola.debug(`System info`, {
+        arch: os.arch(),
+        cpus: os.cpus(),
+        freemem: os.freemem(),
+        platform: os.platform(),
+        version: os.version(),
+    });
+
+    ipcMain.on('log', (_, __, logObj) => {
+        writeLog(logObj);
+    });
+
+    app.on('will-quit', () => {
+        consola.log(`Gracefully ended by will-quit event.\n`);
+        logFileStream.end();
+    });
+};
+
+// Handle unhandleRejection
+process.on('unhandledRejection', (reason, promise) => {
+    consola.warn(reason);
+    consola.warn(promise);
 });
