@@ -20,6 +20,9 @@ const package = require('../package.json');
 const logPool = [];
 let logFileStream;
 
+// Set log level
+consola.level = consola.LogLevel.Trace;
+
 /** Write object to logFileStream */
 const writeLog = (logObj) => {
     const write = (data) => logFileStream.write(JSON.stringify(data) + '\n');

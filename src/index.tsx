@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import consola, { ConsolaReporter, ConsolaReporterLogObject } from 'consola';
+import consola, {
+    ConsolaReporter,
+    ConsolaReporterLogObject,
+    LogLevel,
+} from 'consola';
 import App from './app/App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
@@ -21,6 +25,9 @@ class IPCReporter implements ConsolaReporter {
 
 // Collect logs from consola globally
 consola.addReporter(new IPCReporter());
+
+// Set log level
+consola.level = LogLevel.Trace;
 
 ReactDOM.render(
     <React.StrictMode>
