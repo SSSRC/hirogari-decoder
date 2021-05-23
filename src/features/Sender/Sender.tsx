@@ -34,6 +34,7 @@ import {
     senderStyles,
     formStyles,
 } from './sender.style';
+import consola from 'consola';
 
 type Inputs = {
     userId: string;
@@ -128,7 +129,7 @@ const Sender: React.FC = () => {
             .then((res) => {
                 setIsInProgress(false);
 
-                console.log(res);
+                consola.log(res);
 
                 if (!res.ok) {
                     throw new Error(`${res.status} ${res.statusText}`);
@@ -143,14 +144,14 @@ const Sender: React.FC = () => {
             .catch((error) => {
                 setIsInProgress(false);
 
-                console.error(error);
+                consola.error(error);
 
                 alertHandler.showAlert('Connection error', 'error');
             });
     };
 
     if (Object.keys(errors).length > 0) {
-        console.error(errors);
+        consola.error(errors);
     }
 
     const drawText = (value: string, x_ratio: number, y_ratio: number) => {
