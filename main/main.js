@@ -177,6 +177,7 @@ async function createWindow() {
             'Unsupported Operating System',
             'Sorry, this operating system is not supported.\nApp will exit.'
         );
+        consola.fatal(`Unsupported OS: ${platform}`);
 
         app.exit();
     }
@@ -225,8 +226,8 @@ async function createWindow() {
     });
 }
 
-app.on('ready', () => {
-    setupLog();
+app.on('ready', async () => {
+    await setupLog();
     createWindow();
 });
 
