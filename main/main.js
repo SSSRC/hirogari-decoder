@@ -25,7 +25,18 @@ consola.level = consola.LogLevel.Trace;
 
 /** Write object to logFileStream */
 const writeLog = (logObj) => {
-    const write = (data) => logFileStream.write(JSON.stringify(data) + '\n');
+    const write = (data) => {
+        const { date, type, args } = data;
+        const argsStr = args
+            .map((arg) => {
+                if (typeof arg === 'string') return arg;
+                else if (typeof arg === 'number') return arg.toString();
+                else return JSON.stringify(arg);
+            })
+            .join(' ');
+        const dateStr = date.toISOString ? date.toISOString() : date.toString();
+        logFileStream.write(`${dateStr} [${type}] ${argsStr}\n`);
+    };
 
     if (logFileStream && logFileStream.writable) {
         // Flush logPool
