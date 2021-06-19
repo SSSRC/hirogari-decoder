@@ -199,10 +199,20 @@ const decodeHRGJIS = (dec: number): string => {
         return ' ';
     }
 
-    if ((33 <= dec && dec <= 126) || (161 <= dec && dec <= 248)) {
+    if ((33 <= dec && dec <= 126) || (160 <= dec && dec <= 254)) {
         let codeArray = [dec];
 
-        if (166 <= dec) {
+        {
+            const addr = [0x5b, 0x41, 0x42, 0x49, 0x48, 0x75, 0x76];
+
+            if (dec === 160) {
+                codeArray = [0x81, addr[0]];
+            } else if (249 <= dec) {
+                codeArray = [0x81, addr[dec - 248]];
+            }
+        }
+
+        if (166 <= dec && dec <= 248) {
             dec += 33273;
 
             codeArray = [dec >> 8, dec & 0xff];
