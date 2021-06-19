@@ -211,8 +211,6 @@ async function createWindow() {
 
     mainWindow.loadURL('file:' + path.join(__dirname, '../build/index.html'));
 
-    port = (await getPort()) || port;
-
     const proc = childProcess.spawn(`./server`, [port], {
         cwd: isDevelopment
             ? path.join(__dirname, `../decoder/build/${platform}`)
@@ -243,6 +241,7 @@ async function createWindow() {
 }
 
 app.on('ready', async () => {
+    port = (await getPort()) || port;
     await setupLog();
     createWindow();
 });
